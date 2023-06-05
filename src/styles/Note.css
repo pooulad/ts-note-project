@@ -1,0 +1,67 @@
+.note_main_div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.note_form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.form_field {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 10px;
+}
+.form_input {
+  width: 100%;
+  border: 1px solid #007acc;
+  outline: none;
+  border-radius: 5px;
+  padding: 10px;
+}
+.form_input_select {
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+}
+.form_action {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: row;
+}
+.save_btn {
+  background-color: #007acc;
+  color: #ffffff;
+  border: 1px solid #007acc;
+  outline: none;
+  padding: 5px 10px;
+  margin: 5px 10px;
+  border-radius: 10px;
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+.cancle_btn {
+  background-color: #ffffff;
+  color: #007acc;
+  border: 1px solid #007acc;
+  outline: none;
+  padding: 5px 10px;
+  margin: 5px 10px;
+  border-radius: 10px;
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+}

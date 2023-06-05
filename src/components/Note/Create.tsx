@@ -1,11 +1,15 @@
 import { memo } from "react";
+import NoteForm from "../Child/NoteForm";
+import { NoteData } from "../../types/Note";
 
-const CreateNote = memo(function CreateNote() {
+type CreateNoteProps = {
+  onSubmit: (data: NoteData) => void;
+};
+
+const CreateNote = memo(function CreateNote({ onSubmit }: CreateNoteProps) {
   return (
-    <div>
-      <div>CreateNote</div>
-      <div>CreateNote</div>
-      <div>CreateNote</div>
+    <div className="note_main_div">
+      <NoteForm onSubmit={onSubmit} />
     </div>
   );
 });
