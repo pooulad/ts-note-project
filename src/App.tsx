@@ -1,16 +1,21 @@
 import { Navigate, Route, Routes } from "react-router";
+import "./styles/App.css";
 import Note from "./components/Note/Index";
 import IndexNote from "./pages/Note/Index";
-import "./styles/App.css";
+import SingleNote from "./components/Note/SingleNote";
+import EditNote from "./components/Note/Edit";
+import CreateNote from "./components/Note/Create";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<h1>home</h1>} />
-      <Route path="/new" element={<h1>new</h1>} />
-      <Route path="/note/:id" element={<IndexNote />}>
+      <Route path="/" element={<IndexNote />}>
         <Route index element={<Note />} />
-        <Route path="edit" element={<h1>edit</h1>} />
+        <Route path="create-note" element={<CreateNote />} />
+        <Route path=":id">
+          <Route index element={<SingleNote />} />
+          <Route path="edit" element={<EditNote />} />
+        </Route>
       </Route>
       <Route path="*" element={<Navigate to={"/"} />} />
     </Routes>

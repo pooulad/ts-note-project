@@ -6,7 +6,7 @@ type ClientType = {
 const ClientLayout = memo(function Client({ children }: ClientType) {
   return (
     <>
-      <main>{children}</main>
+      <main className="client_layout_content">{children}</main>
     </>
   );
 });
