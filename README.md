@@ -1,3 +1,4 @@
+# ts-note-project 
 A small project has been written about working with typescript
 
 <p align="center">
