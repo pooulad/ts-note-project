@@ -2,10 +2,6 @@ import { FormEvent, memo, useRef, useState } from "react";
 import Select from "react-select/creatable";
 import { NoteData, Tag } from "../../types/Note";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  NoteNormalOnChange,
-  NoteSelectBoxHandler,
-} from "../../utils/OnChangeHandler";
 import { v4 as uuidV4 } from "uuid";
 
 type NoteFormProps = {

@@ -1,3 +1,4 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Navigate, Route, Routes } from "react-router";
 import Note from "./components/Note/Index";
 import IndexNote from "./pages/Note/Index";
@@ -40,17 +41,14 @@ function App() {
       });
     });
   }
-
   function onDeleteNote(id: string) {
     setNotes((prevNotes) => {
       return prevNotes.filter((note) => note.id !== id);
     });
   }
-
   function addTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
   }
-
   function updateTag(id: string, label: string) {
     setTags((prevTags) => {
       return prevTags.map((tag) => {
@@ -62,7 +60,6 @@ function App() {
       });
     });
   }
-
   function deleteTag(id: string) {
     setTags((prevTags) => {
       return prevTags.filter((tag) => tag.id !== id);
@@ -71,7 +68,17 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<IndexNote />}>
-        <Route index element={<Note />} />
+        <Route
+          index
+          element={
+            <Note
+              notes={notesWithTags}
+              availableTags={tags}
+              onUpdateTag={updateTag}
+              onDeleteTag={deleteTag}
+            />
+          }
+        />
         <Route
           path="create-note"
           element={
@@ -83,8 +90,23 @@ function App() {
           }
         />
         <Route path=":id">
-          <Route index element={<SingleNote />} />
-          <Route path="edit" element={<EditNote />} />
+          <Route
+            index
+            element={
+              <SingleNote onDelete={onDeleteNote} notes={notesWithTags} />
+            }
+          />
+          <Route
+            path="edit"
+            element={
+              <EditNote
+                onSubmit={onUpdateNote}
+                onAddTag={addTag}
+                availableTags={tags}
+                notes={notesWithTags}
+              />
+            }
+          />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to={"/"} />} />

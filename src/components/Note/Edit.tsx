@@ -1,13 +1,34 @@
-import { memo } from "react";
+import { Navigate, useParams } from "react-router-dom";
+import { Note, NoteData, Tag } from "../../types/Note";
+import NoteForm from "../Child/NoteForm";
 
-const EditNote = memo(function EditNote() {
+type EditNoteProps = {
+  onSubmit: (id: string, data: NoteData) => void;
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
+  notes: Note[];
+};
+
+export default function EditNote({
+  onSubmit,
+  onAddTag,
+  availableTags,
+  notes,
+}: EditNoteProps) {
+  const { id } = useParams();
+  const note = notes.find((n) => n.id === id);
+  if (note == null) return <Navigate to="/" replace />;
   return (
-    <div>
-      <div>EditNote</div>
-      <div>EditNote</div>
-      <div>EditNote</div>
-    </div>
+    <>
+      <h1 className="mb-4">Edit Note</h1>
+      <NoteForm
+        title={note.title}
+        markdown={note.markdown}
+        tags={note.tags}
+        onSubmit={(data) => onSubmit(note.id, data)}
+        onAddTag={onAddTag}
+        availableTags={availableTags}
+      />
+    </>
   );
-});
-
-export default EditNote;
+}
