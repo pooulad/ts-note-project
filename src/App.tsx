@@ -6,9 +6,9 @@ import EditNote from "./components/Note/Edit";
 import CreateNote from "./components/Note/Create";
 import "./styles/App.css";
 import { useLocalStorage } from "./hooks/useLocalStorage";
-import { RawNote, Tag } from "./types/Note";
+import { NoteData, RawNote, Tag } from "./types/Note";
 import { useMemo } from "react";
-import { OnCreateNote } from "./utils/Function";
+import { v4 as uuidV4 } from "uuid";
 
 function App() {
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
@@ -21,13 +21,66 @@ function App() {
       };
     });
   }, [notes, tags]);
+  function onCreateNote({ tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return [
+        ...prevNotes,
+        { ...data, id: uuidV4(), tagIds: tags.map((tag) => tag.id) },
+      ];
+    });
+  }
+  function onUpdateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return prevNotes.map((note) => {
+        if (note.id === id) {
+          return { ...note, ...data, tagIds: tags.map((tag) => tag.id) };
+        } else {
+          return note;
+        }
+      });
+    });
+  }
+
+  function onDeleteNote(id: string) {
+    setNotes((prevNotes) => {
+      return prevNotes.filter((note) => note.id !== id);
+    });
+  }
+
+  function addTag(tag: Tag) {
+    setTags((prev) => [...prev, tag]);
+  }
+
+  function updateTag(id: string, label: string) {
+    setTags((prevTags) => {
+      return prevTags.map((tag) => {
+        if (tag.id === id) {
+          return { ...tag, label };
+        } else {
+          return tag;
+        }
+      });
+    });
+  }
+
+  function deleteTag(id: string) {
+    setTags((prevTags) => {
+      return prevTags.filter((tag) => tag.id !== id);
+    });
+  }
   return (
     <Routes>
       <Route path="/" element={<IndexNote />}>
         <Route index element={<Note />} />
         <Route
           path="create-note"
-          element={<CreateNote onSubmit={OnCreateNote(_, setNotes)} />}
+          element={
+            <CreateNote
+              onSubmit={onCreateNote}
+              onAddTag={addTag}
+              availableTags={tags}
+            />
+          }
         />
         <Route path=":id">
           <Route index element={<SingleNote />} />

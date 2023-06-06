@@ -1,49 +1,74 @@
-import { FormEvent, memo, useState } from "react";
+import { FormEvent, memo, useRef, useState } from "react";
 import Select from "react-select/creatable";
-import { NoteData } from "../../types/Note";
-import { Link } from "react-router-dom";
+import { NoteData, Tag } from "../../types/Note";
+import { Link, useNavigate } from "react-router-dom";
 import {
   NoteNormalOnChange,
   NoteSelectBoxHandler,
 } from "../../utils/OnChangeHandler";
+import { v4 as uuidV4 } from "uuid";
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
-  setState : 
-};
-const NoteForm = memo(function NoteForm({ onSubmit,setState }: NoteFormProps) {
-  const [formData, setFormData] = useState<NoteData>({
-    title: "",
-    body: "",
-    tags: [],
-  });
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
+} & Partial<NoteData>;
+
+const NoteForm = memo(function NoteForm({
+  onSubmit,
+  onAddTag,
+  availableTags,
+  title = "",
+  markdown = "",
+  tags = [],
+}: NoteFormProps) {
+  const titleRef = useRef<HTMLInputElement>(null);
+  const markdownRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
+  const navigate = useNavigate();
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmit({
-      title: "title",
-      body: "body",
-      tags: [{ id: "1", label: "label", value: "value" }],
-    },setState);
+      title: titleRef.current!.value,
+      markdown: markdownRef.current!.value,
+      tags: selectedTags,
+    });
+    navigate("..");
   };
-  console.log(formData);
   return (
     <form className="note_form">
       <div className="form_field">
         <label htmlFor="title">title</label>
         <input
-          value={formData.title}
-          onChange={(e) => {
-            NoteNormalOnChange(e, setFormData);
-          }}
+          defaultValue={title}
           className="form_input"
           type="text"
           id="title"
           name="title"
+          ref={titleRef}
         />
       </div>
       <div className="form_field">
         <label htmlFor="tags">tags</label>
         <Select
+          onCreateOption={(label) => {
+            const newTag = { id: uuidV4(), label };
+            onAddTag(newTag);
+            setSelectedTags((prev) => [...prev, newTag]);
+          }}
+          value={selectedTags.map((tag) => {
+            return { label: tag.label, value: tag.id };
+          })}
+          options={availableTags.map((tag) => {
+            return { label: tag.label, value: tag.id };
+          })}
+          onChange={(tags) => {
+            setSelectedTags(
+              tags.map((tag) => {
+                return { label: tag.label, id: tag.value };
+              })
+            );
+          }}
           styles={{
             control: (baseStyles) => ({
               ...baseStyles,
@@ -51,25 +76,20 @@ const NoteForm = memo(function NoteForm({ onSubmit,setState }: NoteFormProps) {
               padding: "5px",
             }),
           }}
-          value={formData.tags}
-          onChange={(e) => {
-            NoteSelectBoxHandler(e, setFormData, "tags");
-          }}
           className="form_input_select"
           inputId="tags"
           isMulti={true}
         />
       </div>
       <div className="form_field">
-        <label htmlFor="body">body</label>
+        <label htmlFor="markdown">markdown</label>
         <textarea
-          value={formData.body}
-          onChange={(e) => {
-            NoteNormalOnChange(e, setFormData);
-          }}
-          name="body"
+          defaultValue={markdown}
+          required
+          ref={markdownRef}
+          name="markdown"
           className="form_input"
-          id="body"
+          id="markdown"
         />
       </div>
       <div className="form_action">
