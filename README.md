@@ -1,4 +1,6 @@
 # ts-note-project 
+![Screenshot (26) - Copy](https://github.com/pooulad/ts-note-project/assets/86445458/50700c7e-d2bd-4688-a6ec-9a1241ce684f)
+
 A small project has been written about working with typescript
 
 <p align="center">
